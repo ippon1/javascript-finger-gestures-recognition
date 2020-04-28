@@ -12,7 +12,8 @@
 </body>
 <script type="text/JavaScript">
     function openCvReady() {
-        // segmenting by skin color (has to be adjusted)
+
+// segmenting by skin color (has to be adjusted)
         const skinColorUpper = hue => new cv.Vec(hue, 0.8 * 255, 0.6 * 255);
         const skinColorLower = hue => new cv.Vec(hue, 0.1 * 255, 0.05 * 255);
 
@@ -36,17 +37,17 @@
             return contours.sort((c0, c1) => c1.area - c0.area)[0];
         };
 
-        // returns distance of two points
+// returns distance of two points
         const ptDist = (pt1, pt2) => pt1.sub(pt2).norm();
 
-        // returns center of all points
+// returns center of all points
         const getCenterPt = pts => pts.reduce(
             (sum, pt) => sum.add(pt),
             new cv.Point(0, 0)
         ).div(pts.length);
 
-        // get the polygon from a contours hull such that there
-        // will be only a single hull point for a local neighborhood
+// get the polygon from a contours hull such that there
+// will be only a single hull point for a local neighborhood
         const getRoughHull = (contour, maxDist) => {
             // get hull indices and hull points
             const hullIndices = contour.convexHullIndices();
@@ -119,13 +120,14 @@
                 return angleDeg < maxAngleDeg;
             });
 
-        const blue = new cv.Vec(255, 0, 0);
-        const green = new cv.Vec(0, 255, 0);
-        const red = new cv.Vec(0, 0, 255);
+        const blue = new cv.Scalar(255, 0, 0);
+        const green = new cv.Scalar(0, 255, 0);
+        const red = new cv.Scalar(0, 0, 255);
 
-        // main
+// main
         const delay = 20;
-        grabFrames('../data/hand-gesture.mp4', delay, (frame) => {
+
+        grabFrames('../test_dataset/IMG_5499.mov', delay, (frame) => {
             const resizedImg = frame.resizeToMax(640);
 
             const handMask = makeHandMask(resizedImg);
@@ -199,8 +201,9 @@
 
             cv.imshow('handMask', handMask);
             cv.imshow('result', sideBySide);
+        });
 
 
-        }
+    }
 </script>
 </html>
