@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opencv JS</title>
+    <script async src="./libraries/opencv/opencv.js" onload="openCvReady();"></script>
+    <script src="./libraries/opencv/utils.js"></script>
+</head>
+<body>
+<video id="cam_input" height="480" width="640"></video>
+<canvas id="canvas_output"></canvas>
+</body>
+<script type="text/JavaScript">
+    function openCvReady() {
+        cv['onRuntimeInitialized'] = () => {
+            let video = document.getElementById("cam_input"); // video is the id of video tag
+            navigator.mediaDevices.getUserMedia({video: true, audio: false})
+                .then(function (stream) {
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch(function (err) {
+                    console.log("An error occurred! " + err);
+                });
+            let src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
+            let dst = new cv.Mat(video.height, video.width, cv.CV_8UC1);
+            let cap = new cv.VideoCapture(cam_input);
+            const FPS = 24;
+
+            // https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0
+            //////////////////////// 1. Preparing the binary mask
+            // segmenting by skin color (has to be adjusted)
+            const skinColorUpper = hue => new cv.Vec(hue, 0.8 * 255, 0.6 * 255);
+            const skinColorLower = hue => new cv.Vec(hue, 0.1 * 255, 0.05 * 255);
+
+            const makeHandMask = (img) => {
+                // filter by skin color
+                const imgHLS = img.cvtColor(cv.COLOR_BGR2HLS);
+                const rangeMask = imgHLS.inRange(skinColorLower(0), skinColorUpper(15));
+
+                // remove noise
+                const blurred = rangeMask.blur(new cv.Size(10, 10));
+                const thresholded = blurred.threshold(
+                    200,
+                    255,
+                    cv.THRESH_BINARY
+                );
+
+                return thresholded;
+            };
+
+
+
+            function processVideo() {
+                let begin = Date.now();
+                cap.read(src);
+
+                src.copyTo(dst);
+
+                //xx = makeHandMask(dst);
+
+                cv.imshow("canvas_output", dst);
+                // schedule next one.
+                let delay = 1000 / FPS - (Date.now() - begin);
+                setTimeout(processVideo, delay);
+            }
+
+// schedule first one.
+            setTimeout(processVideo, 0);
+        };
+    }
+</script>
+</html>
