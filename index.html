@@ -14,6 +14,8 @@
 </body>
 <script type="text/JavaScript">
 
+    const ptDist = (pt1, pt2) => pt1.sub(pt2).norm();
+
     function openCvReady() {
         cv['onRuntimeInitialized'] = () => {
             let src = cv.imread('canvasInput');
@@ -41,7 +43,7 @@
             let contours = new cv.MatVector();
             let hierarchy = new cv.Mat();
             cv.findContours(thresholded, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-            let cnt = contours.get(0);
+            let handContour = contours.get(0);
 
             ////////////////Draw HandContour//////////////////
             for (let i = 0; i < contours.size(); ++i) {
@@ -52,30 +54,32 @@
 
             ///////////////////getRoughHull///////////////////
             // https://docs.opencv.org/3.4/d8/d1c/tutorial_js_contours_more_functions.html
-            if (cnt) {
+            if (handContour) {
                 // TODO remove this
                 //dst = cv.Mat.zeros(thresholded.rows, thresholded.cols, cv.CV_8UC3);
-                let hull = new cv.Mat();
-                let defect = new cv.Mat();
+                let hullIndices = new cv.Mat();
+                let defects = new cv.Mat();
                 let lineColor = new cv.Scalar(255, 0, 0);
                 let circleColor = new cv.Scalar(255, 255, 255);
                 let maxDist = 25;
 
                 // get hull indices and hull points
-                cv.convexHull(cnt, hull, false, false);
-                cv.convexityDefects(cnt, hull, defect);
+                cv.convexHull(handContour, hullIndices, false, false);
+                cv.convexityDefects(handContour, hullIndices, defects);
+
+                ///////////////////
 
 
-                for (let i = 0; i < defect.rows; ++i) {
-                    let start = new cv.Point(cnt.data32S[defect.data32S[i * 4] * 2], cnt.data32S[defect.data32S[i * 4] * 2 + 1]);
-                    let end = new cv.Point(cnt.data32S[defect.data32S[i * 4 + 1] * 2], cnt.data32S[defect.data32S[i * 4 + 1] * 2 + 1]);
-                    let far = new cv.Point(cnt.data32S[defect.data32S[i * 4 + 2] * 2], cnt.data32S[defect.data32S[i * 4 + 2] * 2 + 1]);
+                for (let i = 0; i < defects.rows; ++i) {
+                    let start = new cv.Point(handContour.data32S[defects.data32S[i * 4] * 2], handContour.data32S[defects.data32S[i * 4] * 2 + 1]);
+                    let end = new cv.Point(handContour.data32S[defects.data32S[i * 4 + 1] * 2], handContour.data32S[defects.data32S[i * 4 + 1] * 2 + 1]);
+                    let far = new cv.Point(handContour.data32S[defects.data32S[i * 4 + 2] * 2], handContour.data32S[defects.data32S[i * 4 + 2] * 2 + 1]);
                     cv.line(dst, start, end, lineColor, 2, cv.LINE_AA, 0);
-                    //cv.circle(dst, start, 3, circleColor, -1);
-                    //cv.circle(dst, end, 3, circleColor, -1);
+                    cv.circle(dst, start, 3, circleColor, -1);
+                    cv.circle(dst, end, 3, circleColor, -1);
                     cv.circle(dst, far, 3, circleColor, -1);
                 }
-                ///////////////////clean hull///////////
+                ///////////////////clean hull////////// */
             }
             cv.imshow('canvasOutput', dst);
 
