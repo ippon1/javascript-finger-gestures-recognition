@@ -65,10 +65,18 @@
 
                 // get hull indices and hull points
                 cv.convexHull(handContour, hullIndices, false, false);
+
+                ///////////getHullDefectVertices//////////////////
                 cv.convexityDefects(handContour, hullIndices, defects);
 
-                ///////////////////
+                ///////////filterVerticesByAngle//////////////////
 
+
+
+
+
+
+                ///////////Visualization//////////////////
 
                 for (let i = 0; i < defects.rows; ++i) {
                     let start = new cv.Point(handContour.data32S[defects.data32S[i * 4] * 2], handContour.data32S[defects.data32S[i * 4] * 2 + 1]);
