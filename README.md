@@ -3,7 +3,9 @@
  
  javascript finger gestures recognition 
 
- Inspired by: https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0
+ Code inspired by: https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0
+ Paper: https://ieeexplore.ieee.org/abstract/document/6734047
+
 
 ## Tutorials used:
 * [makeHandMask](https://docs.opencv.org/3.4/d8/d1c/tutorial_js_contours_more_functions.html)
