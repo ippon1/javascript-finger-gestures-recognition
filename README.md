@@ -3,8 +3,8 @@
  
  javascript finger gestures recognition 
 
- Code inspired by: https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0
- Paper: https://ieeexplore.ieee.org/abstract/document/6734047
+ * Code inspired by: https://medium.com/@muehler.v/simple-hand-gesture-recognition-using-opencv-and-javascript-eb3d6ced28a0
+ * Paper: https://ieeexplore.ieee.org/abstract/document/6734047
 
 
 ## Tutorials used:
