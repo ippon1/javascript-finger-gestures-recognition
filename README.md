@@ -14,6 +14,7 @@
 
 ## Stackoverflow Questions to this code:
 * [binary hand mask](https://stackoverflow.com/questions/60818266/how-to-create-a-binary-hand-mask-in-web-browser-open-cv)
+ * [binary hand mask github](https://github.com/justadudewhohacks/opencv4nodejs/blob/master/examples/handGestureRecognition0.js)
 * [Partition](https://stackoverflow.com/questions/61508007/reducing-the-number-of-defects-of-the-convex-hull-of-finger-recognition-with-ope)
 
 ## Resources
